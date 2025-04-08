@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Insights{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>🧠 Your Query</h2>
+  <p class="query">{{ query }}</p>
+</div>
+
+{% for block in result.split("====") %}
+  {% if block.strip() %}
+    <div class="insight-block">
+      {% for line in block.strip().split("\n") %}
+        {% if line.startswith("🧠 Query") %}
+          <h4 class="title">{{ line }}</h4>
+        {% elif "Forecasting Agent" in line %}
+          <div class="label green">{{ line }}</div>
+        {% elif "MarketWatcher Agent" in line %}
+          <div class="label orange">{{ line }}</div>
+        {% elif "WebSearch Agent" in line %}
+          <div class="label blue">{{ line }}</div>
+        {% elif "FAQs Agent" in line %}
+          <div class="label purple">{{ line }}</div>
+        {% else %}
+          <p>{{ line }}</p>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endfor %}
+
+<a href="{{ url_for('home') }}" class="back-btn">← Ask Another</a>
+{% endblock %}
